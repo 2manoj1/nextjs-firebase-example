@@ -32,7 +32,6 @@ export const getMessagingObj = async (): Promise<Messaging | null> => {
 
 export const fetchToken = async () => {
 	try {
-		console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
 		const messaging = await getMessagingObj();
 		if (!messaging) return null;
 
