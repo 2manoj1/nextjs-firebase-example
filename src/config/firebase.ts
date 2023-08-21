@@ -33,13 +33,13 @@ export const getMessagingObj = async (): Promise<Messaging | null> => {
 export const fetchToken = async () => {
 	try {
 		const messaging = await getMessagingObj();
-		if (!messaging) return null;
-
-		const token = await getToken(messaging, {
-			vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY ?? "",
-		});
-
-		return token ?? null;
+		if (messaging) {
+			const token = await getToken(messaging, {
+				vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY ?? "",
+			});
+			return token;
+		}
+		return null;
 	} catch (err) {
 		console.error(err);
 		return null;

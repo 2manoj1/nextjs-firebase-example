@@ -35,11 +35,12 @@ async function notifyMe() {
 
 export const useFCM = () => {
 	const [fcmToken, setFcmToken] = useState<string | null>(null);
-	const loadToken = useCallback(async () => {
+
+	const loadToken = async () => {
 		const token = await notifyMe();
 		console.log("loadToken", { token });
 		setFcmToken(token);
-	}, []);
+	};
 
 	const listenerMessage = useCallback(async () => {
 		if (!fcmToken) return null;
@@ -68,7 +69,7 @@ export const useFCM = () => {
 	useEffect(() => {
 		if ("Notification in window" && Notification.permission === "granted")
 			loadToken();
-	}, [loadToken]);
+	}, []);
 
 	useEffect(() => {
 		let instanceOnMessage: Unsubscribe | null;
