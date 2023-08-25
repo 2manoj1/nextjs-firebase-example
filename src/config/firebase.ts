@@ -26,6 +26,7 @@ export const app = !getApps()?.length
 // Initialize Firebase Cloud Messaging and get a reference to the service
 export const getMessagingObj = async (): Promise<Messaging | null> => {
 	const supported = await isSupported();
+	console.log("is supported fcm? >>", supported);
 	if (!supported || typeof window === "undefined") return null;
 	return getMessaging(app);
 };
