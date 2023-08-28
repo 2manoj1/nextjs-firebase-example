@@ -70,6 +70,7 @@ export const useFCM = () => {
 
     // if token not in db or its outdated send to backend
     if (!savedToken) {
+      await db.fcmTokens.clear();
       console.info(
         `%cFCM Token: ${token} --> send to backend`,
         "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
@@ -79,7 +80,7 @@ export const useFCM = () => {
 
     // Evrytime update token in indexdb
 
-    await db.fcmTokens.put({ token });
+    await db.fcmTokens.put(savedToken ? savedToken : { token });
 
     setFcmToken(token);
   };
