@@ -39,17 +39,29 @@ export const useFCM = () => {
   const retryLoadToken = useRef(0);
 
   const loadToken = async () => {
+    if (Notification.permission === "denied") {
+      console.info(
+        `%cPlease enable notfications via browser settings.`,
+        "color: red; background: #c7c7c7; padding: 8px; font-size: 20px"
+      );
+      return null;
+    }
+
     if (retryLoadToken.current >= 3) {
-      await db.fcmTokens.clear();
       alert("unable to load token, refresh the browser");
-      return;
+      console.info(
+        `%cPush Notifications issue - unable to load token after 3 retry`,
+        "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
+      );
+      return null;
     }
     const token = await notifyMe();
 
     if (!token) {
+      await db.fcmTokens.clear();
       retryLoadToken.current += 1;
       loadToken();
-      return null;
+      return;
     }
 
     const savedToken = await db.fcmTokens.where({ token: token }).toArray();
