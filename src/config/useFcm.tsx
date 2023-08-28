@@ -40,6 +40,7 @@ export const useFCM = () => {
 
   const loadToken = async () => {
     if (Notification.permission === "denied") {
+      alert("Please enable notfications via browser settings.");
       console.info(
         `%cPlease enable notfications via browser settings.`,
         "color: red; background: #c7c7c7; padding: 8px; font-size: 20px"
