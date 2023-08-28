@@ -65,22 +65,21 @@ export const useFCM = () => {
       return;
     }
 
-    const savedToken = await db.fcmTokens.where({ token: token }).toArray();
-    if (!savedToken?.length && token) {
-      const id = await db.fcmTokens.add({ token });
+    // Geting token from indexDB
+    const savedToken = await db.fcmTokens.where({ token: token }).first();
+
+    // if token not in db or its outdated send to backend
+    if (!savedToken) {
       console.info(
-        `%cFCM Token added: ${token} successfully added to indexDB. Got id ${id}`,
+        `%cFCM Token: ${token} --> send to backend`,
         "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
       );
+      // Todo call to backend
     }
 
-    if (savedToken?.length > 0 && token !== savedToken[0].token) {
-      const updatedId = await db.fcmTokens.put({ token });
-      console.info(
-        `%cFCM Token updated in indexdb: ${token} successfully updated to indexDB. Got id ${updatedId}`,
-        "color: green; background: #c700c7; padding: 8px; font-size: 20px"
-      );
-    }
+    // Evrytime update token in indexdb
+
+    await db.fcmTokens.put({ token });
 
     setFcmToken(token);
   };
